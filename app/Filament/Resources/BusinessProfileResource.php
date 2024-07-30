@@ -28,9 +28,6 @@ class BusinessProfileResource extends Resource
                 Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('category_business_id')
-                    ->required()
-                    ->numeric(),
                 Select::make('category_business_id')
                     ->label('Kategori')
                     ->relationship(name: 'category_business', titleAttribute: 'name')

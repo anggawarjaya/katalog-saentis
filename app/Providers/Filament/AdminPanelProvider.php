@@ -27,6 +27,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->profile()
             ->colors([
                 'primary' => Color::Amber,
             ])
@@ -53,6 +54,12 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ]);
+            ])
+            ->databaseNotifications()
+            ->databaseNotificationsPolling('30s')
+            ->favicon(asset('img/Logo Deli Serdang.png'))
+            ->brandLogo(asset('img/Logo Deli Serdang.png'))
+            ->brandLogoHeight('3.5rem')
+            ->brandName('UMKM Saentis');
     }
 }
