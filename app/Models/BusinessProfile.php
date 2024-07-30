@@ -25,4 +25,14 @@ class BusinessProfile extends Model
     {
         return $this->hasMany(Product::class);
     }
+
+    public function hamlet(): BelongsTo
+    {
+        return $this->belongsTo(Hamlet::class);
+    }
+
+    public function images(): HasMany
+    {
+        return $this->hasMany(Image::class);
+    }
 }

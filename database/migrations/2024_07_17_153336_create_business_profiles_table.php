@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('tiktok')->nullable();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('category_business_id')->constrained('category_businesses')->cascadeOnDelete();
+            $table->foreignId('hamlet_id')->constrained('hamlets')->cascadeOnDelete();
             $table->boolean('approved')->default(false);
             $table->timestamps();
         });
