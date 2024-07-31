@@ -358,16 +358,16 @@ return [
 
                 'modal' => [
 
-                    'heading' => 'Buat',
+                    'heading' => 'Tambah',
 
                     'actions' => [
 
                         'create' => [
-                            'label' => 'Buat',
+                            'label' => 'Tambah',
                         ],
 
                         'create_another' => [
-                            'label' => 'Buat & buat lainnya',
+                            'label' => 'Tambah & tambah lainnya',
                         ],
 
                     ],

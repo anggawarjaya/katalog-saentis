@@ -23,6 +23,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('category_business_id')->constrained('category_businesses')->cascadeOnDelete();
             $table->foreignId('hamlet_id')->constrained('hamlets')->cascadeOnDelete();
+            $table->json('location')->nullable();
             $table->boolean('approved')->default(false);
             $table->timestamps();
         });
