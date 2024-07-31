@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -60,6 +61,9 @@ class AdminPanelProvider extends PanelProvider
             ->favicon(asset('img/Logo Deli Serdang.png'))
             ->brandLogo(asset('img/Logo Deli Serdang.png'))
             ->brandLogoHeight('3.5rem')
-            ->brandName('UMKM Saentis');
+            ->brandName('UMKM Saentis')
+            ->plugins([
+                FilamentShieldPlugin::make()
+            ]);
     }
 }
