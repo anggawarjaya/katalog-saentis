@@ -23,6 +23,8 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rules\Password;
 use Traineratwot\FilamentOpenStreetMap\Forms\Components\MapInput;
 
 class BusinessProfileResource extends Resource
@@ -33,7 +35,7 @@ class BusinessProfileResource extends Resource
 
     protected static ?string $navigationLabel = 'Profil UMKM';
 
-    protected static ?int $navigationSort = 1;
+    protected static ?int $navigationSort = 2;
 
     protected static ?string $pluralModelLabel = 'Profil UMKM';
 
@@ -43,7 +45,13 @@ class BusinessProfileResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return static::getModel()::count();
+        $queryModifier = function ($query) {
+            $query->where('approved', 1);
+        };
+
+        $count = static::getModel()::where($queryModifier)->count();
+
+        return (string) $count;
     }
 
     public static function form(Form $form): Form
@@ -84,15 +92,24 @@ class BusinessProfileResource extends Resource
                                 TextInput::make('name')
                                     ->label('Nama Pemilik UMKM')
                                     ->required()
-                                    ->label('Nama Pemilik UMKM'),
+                                    ->maxLength(255),
                                 TextInput::make('email')
-                                    ->label('Alamat Email')
+                                    ->label('Alamat email')
+                                    ->unique()
+                                    ->email()
                                     ->required()
-                                    ->email(),
+                                    ->maxLength(255),
                                 TextInput::make('password')
+                                    ->label('Password')
                                     ->password()
-                                    ->revealable()
-                                    ->required(),
+                                    ->revealable(filament()->arePasswordsRevealable())
+                                    ->rule(Password::default())
+                                    ->dehydrateStateUsing(fn ($state): string => Hash::make($state))
+                                    ->required()
+                                    ->maxLength(255),
+                                Select::make('roles')
+                                    ->relationship('roles', 'name')
+                                    ->default('UMKM')
                             ]),
                         Select::make('hamlet_id')
                             ->label('Nama Dusun')
@@ -135,13 +152,14 @@ class BusinessProfileResource extends Resource
                     ->columns(3)
                     ->collapsible()
                     ->collapsed(),
-                    MapInput::make('location')
-                        ->label('Lokasi UMKM')
-                        ->saveAsArray()
-                        ->placeholder('Geser ke lokasi UMKM')
-                        ->coordinates(98.7438529, 3.6635647)
-                        ->rows(20)
-                        ->columnSpanFull()
+                MapInput::make('location')
+                    ->label('Lokasi UMKM')
+                    ->zoom(20)
+                    ->saveAsArray()
+                    ->placeholder('Geser ke lokasi UMKM')
+                    ->coordinates(98.7438529, 3.6635647)
+                    ->rows(20)
+                    ->columnSpanFull()
             ]);
     }
 

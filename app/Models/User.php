@@ -6,6 +6,7 @@ namespace App\Models;
 
 use BezhanSalleh\FilamentShield\Traits\HasPanelShield;
 use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -50,5 +51,19 @@ class User extends Authenticatable implements FilamentUser
     public function business_profiles(): HasMany
     {
         return $this->hasMany(BusinessProfile::class);
+    }
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        $akses = false;
+        if ($panel->getId() === 'umkm') {
+            $akses = $this->hasAnyRole(['super_admin', 'admin', 'admin_dusun', 'umkm']);
+        } elseif ($panel->getId() === 'admin_dusun') {
+            $akses = $this->hasAnyRole(['super_admin', 'admin', 'admin_dusun']);
+        } elseif ($panel->getId() === 'admin') {
+            $akses = $this->hasAnyRole(['super_admin', 'admin']);
+        }
+
+        return $akses;
     }
 }
